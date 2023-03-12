@@ -5,8 +5,10 @@ const size = [8, 8];
 
 function Board() {
   return (
-    <table class="table">
-        {[...Array(size[0])].map(() => <Row numCols={size[1]} />)}
+    <table className="table">
+      <tbody>
+        {[...Array(size[0])].map((e,i) => <Row key={i} numCols={size[1]} />)}
+      </tbody>
     </table>
   );
 }

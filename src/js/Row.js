@@ -2,10 +2,9 @@ import "../css/Row.css";
 import Square from "./Square";
 
 function Row( {numCols} ) {
-  console.log(numCols)
   return (
     <tr>
-      {[...Array(numCols)].map(() => <Square />)}
+      {[...Array(numCols)].map((e,i) => <Square key={i} />)}
     </tr>
   );
 }
