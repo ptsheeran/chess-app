@@ -1,17 +1,11 @@
 import "../css/Row.css";
 import Square from "./Square";
 
-function Row() {
+function Row( {numCols} ) {
+  console.log(numCols)
   return (
     <tr>
-        <Square />
-        <Square />
-        <Square />
-        <Square />
-        <Square />
-        <Square />
-        <Square />
-        <Square />
+      {[...Array(numCols)].map(() => <Square />)}
     </tr>
   );
 }
