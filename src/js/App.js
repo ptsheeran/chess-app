@@ -1,11 +1,10 @@
 import '../css/App.css';
+import Board from './Board.js'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        Hello world
-      </header>
+      <Board />
     </div>
   );
 }

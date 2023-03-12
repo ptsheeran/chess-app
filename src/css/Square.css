@@ -1,0 +1,16 @@
+td {
+    background-color: #e5e9dd;
+    height: calc(min(75vh, 75vw) / 8);
+    width: calc(min(75vh, 75vw) / 8);
+    max-height: 100px;
+    max-width: 100px;
+    color: black;
+}
+
+tr:nth-child(odd) td:nth-child(even) {
+    background-color: #4a9e5b; 
+}
+
+tr:nth-child(even) td:nth-child(odd) {
+    background-color: #4a9e5b; 
+}
