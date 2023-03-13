@@ -1,30 +1,15 @@
 import '../css/App.css';
 import Board from './Board.js'
-import {initializeApp} from 'firebase/app'
-import {firebaseConfig} from '../utilities/firebaseConfig';
-import {signInAnonymously, getAuth} from 'firebase/auth'
+import { initializeFirebase } from '../utilities/firebase';
+import SideMenu from './SideMenu';
 
 function App() {
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  let playerId;
-
-  signInAnonymously(auth).catch((error) => {
-    console.log(error);
-  });
-
-  auth.onAuthStateChanged((user) => {
-    if(user) {
-      playerId = user.uid;
-      console.log(playerId)
-    } else {
-      //logged out
-    }
-  });
-
+  initializeFirebase();
+  
   return (
     <div className="App">
       <Board />
+      <SideMenu />
     </div>
   );
 }
