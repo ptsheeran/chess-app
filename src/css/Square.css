@@ -14,3 +14,7 @@ tr:nth-child(odd) td:nth-child(even) {
 tr:nth-child(even) td:nth-child(odd) {
     background-color: #4a9e5b; 
 }
+
+img.piece {
+    width: calc(min(75vh, 75vw) / 8);
+}

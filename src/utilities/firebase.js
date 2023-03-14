@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app'
 import {firebaseConfig} from '../utilities/firebaseConfig';
-import {signInAnonymously, getAuth} from 'firebase/auth'
+import {signInAnonymously, getAuth, onAuthStateChanged} from 'firebase/auth'
 
 export let app = undefined;
 export let auth = undefined;
