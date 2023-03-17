@@ -1,1 +1,0 @@
-export const colMapping = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']

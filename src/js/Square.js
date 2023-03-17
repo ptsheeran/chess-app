@@ -1,32 +1,29 @@
 import '../css/Square.css';
-import {ref, getDatabase, onValue} from 'firebase/database';
-import { useState } from 'react';
-import { gameStatesEqual } from '../utilities/gameStateUtils';
+import { useEffect, useState } from 'react';
 import { getPieceImg } from '../utilities/pieceImageUtils';
-import { getPotentiallyMoveableSquares} from '../utilities/pieceMovementUtils';
 
-function Square({row, col, gameId}) {
-  const db = getDatabase();
-  const gameStateRef = ref(db, `game-states/${gameId}`);
-  let [gameState, setGameState] = useState();
+function Square({rank, file, moveableSquares, piece, onSquareClick}) {
+  let [moveable, setMoveable] = useState(false);
 
-  function onSquareClick() {
-    let potentiallyMoveableSquares = [];
-    const pieceCode = gameState[col][row];
-    potentiallyMoveableSquares = getPotentiallyMoveableSquares(row, col, pieceCode, gameState);
-    console.log(potentiallyMoveableSquares);
-  }
-
-  onValue(gameStateRef, (snapshot) => {
-    const data = snapshot.val();
-    if(!gameStatesEqual(data, gameState)) {
-      setGameState(data)
+  useEffect(() => {
+    if(moveableSquares && moveableSquares.includes(file+rank)) {
+      setMoveable(true);
+    } else {
+      setMoveable(false);
     }
-  });
+  }, [moveableSquares, file, rank]);
 
-  return (
-    <td onClick={onSquareClick}>{gameState?getPieceImg(gameState[col][row]):''}</td>
-  );
+  if(moveable) {
+    return (
+      <div className='square' onClick={() => {onSquareClick(rank,file)}}><span className='moveable'></span></div>
+    )
+  } else if(piece) {
+    return (
+      <div className='square' onClick={() => {onSquareClick(rank,file)}}>{piece['type']==='e'?'':getPieceImg(piece)}</div>
+    );
+  } else {
+    return <div className='square'></div>
+  }
 }
 
 export default Square;

@@ -1,20 +1,32 @@
-td {
+.square {
     background-color: #e5e9dd;
     height: calc(min(75vh, 75vw) / 8);
     width: calc(min(75vh, 75vw) / 8);
     max-height: 100px;
     max-width: 100px;
     color: black;
+    margin: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-tr:nth-child(odd) td:nth-child(even) {
+.file:nth-child(odd) .square:nth-child(even) {
     background-color: #4a9e5b; 
 }
 
-tr:nth-child(even) td:nth-child(odd) {
+.file:nth-child(even) .square:nth-child(odd) {
     background-color: #4a9e5b; 
 }
 
 img.piece {
     width: calc(min(75vh, 75vw) / 8);
+}
+
+.moveable {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
 }

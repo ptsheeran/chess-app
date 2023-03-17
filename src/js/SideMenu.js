@@ -3,7 +3,12 @@ import {getDatabase, ref, set, remove} from 'firebase/database'
 import {userId} from '../utilities/firebase'
 import { v4 as uuidv4 } from 'uuid';
 
+import { newGameBoardState } from '../utilities/newGameBoardState';
+import { createNewPieces } from '../utilities/createPieces';
+
 function SideMenu({gameId, onGameIdChange, onColorChange}) {
+  const db = getDatabase();
+
   function assignPlayers() {
     const num = Math.random();
     if(num < 0.5) {
@@ -21,105 +26,29 @@ function SideMenu({gameId, onGameIdChange, onColorChange}) {
     }
   }
 
-  function createNewGame() {
-    const db = getDatabase();
-    const newGameId = uuidv4();
-    onGameIdChange(newGameId);
-    const newGameRef = ref(db, `active-games/${newGameId}`);
+  function addNewActiveGame(gameId) {
+    const newGameRef = ref(db, `active-games/${gameId}`);
     const players = assignPlayers();
     const newGame = {
-      id: newGameId,
+      id: gameId,
       players
     }
     set(newGameRef, newGame);
-    initializeGameState(db, newGameId);
   }
 
-  function initializeGameState(db, gameId) {
-    const newGameStateRef = ref(db, `game-states/${gameId}`);
-    const newGameState = {
-      a: {
-        1: 'wr',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'br'
-      },
-      b: {
-        1: 'wn',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bn'
-      },
-      c: {
-        1: 'wb',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bb'
-      },
-      d: {
-        1: 'wq',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bq'
-      },
-      e: {
-        1: 'wk',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bk'
-      },
-      f: {
-        1: 'wb',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bb'
-      },
-      g: {
-        1: 'wn',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'bn'
-      },
-      h: {
-        1: 'wr',
-        2: 'wp',
-        3: 'e',
-        4: 'e',
-        5: 'e',
-        6: 'e',
-        7: 'bp',
-        8: 'br'
-      },
-    };
-    set(newGameStateRef, newGameState); 
+  function initializePieceStatesAndBoardState(gameId) {
+    const [newPieces, newBoardState] = createNewPieces(newGameBoardState);
+    const newBoardStateRef = ref(db, `game-states/${gameId}/board-state`);
+    const newPieceStatesRef = ref(db, `game-states/${gameId}/piece-states`);
+    set(newBoardStateRef, newBoardState);
+    set(newPieceStatesRef, newPieces);
+  }
+
+  function createNewGame() {
+    const newGameId = uuidv4();
+    onGameIdChange(newGameId);
+    addNewActiveGame(newGameId);
+    initializePieceStatesAndBoardState(newGameId);
   }
 
   function endGame() {

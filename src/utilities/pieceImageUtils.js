@@ -1,4 +1,5 @@
-export function getPieceImg(pieceCode) {
+export function getPieceImg(piece) {
+    const pieceCode = piece.color + piece.type;
     let url;
     switch(pieceCode) {
         case 'bk':

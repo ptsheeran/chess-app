@@ -1,0 +1,1 @@
+export const fileMapping = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
