@@ -15,11 +15,11 @@ function Square({rank, file, moveableSquares, piece, onSquareClick}) {
 
   if(moveable) {
     return (
-      <div className='square' onClick={() => {onSquareClick(rank,file)}}><span className='moveable'></span></div>
+      <div className='square' onClick={() => {onSquareClick(piece)}}><span className='moveable'></span></div>
     )
   } else if(piece) {
     return (
-      <div className='square' onClick={() => {onSquareClick(rank,file)}}>{piece['type']==='e'?'':getPieceImg(piece)}</div>
+      <div className='square' onClick={() => {onSquareClick(piece)}}>{piece['type']==='e'?'':getPieceImg(piece)}</div>
     );
   } else {
     return <div className='square'></div>

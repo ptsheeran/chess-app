@@ -22,7 +22,7 @@ export function createNewPieces(boardState) {
     let newBoardState = Object.assign({}, boardState);
     for(const color of colors) {
         //kings
-        const kingPiece = {
+        let piece = {
             id: uuidv4(),
             rank: ranksAtColors[color]['1'],
             file: 'e',
@@ -34,11 +34,11 @@ export function createNewPieces(boardState) {
             hasMoved: false,
             isChecked: false,
         }
-        pieces[color].push(kingPiece);
-        newBoardState[kingPiece.file][kingPiece.rank] = kingPiece;
+        pieces[color].push(piece);
+        newBoardState[piece.file][piece.rank] = piece;
 
         //queens
-        const queenPiece = {
+        piece = {
             id: uuidv4(),
             rank: ranksAtColors[color]['1'],
             file: 'd',
@@ -51,13 +51,13 @@ export function createNewPieces(boardState) {
             isChecking: false,
             isProtected: true,
         }
-        pieces[color].push(queenPiece);
-        newBoardState[queenPiece.file][queenPiece.rank] = queenPiece;
+        pieces[color].push(piece);
+        newBoardState[piece.file][piece.rank] = piece;
 
         //rooks
         let files = ['a', 'h'];
         for(const file of files) {
-            const rookPiece = {
+            piece = {
                 id: uuidv4(),
                 rank: ranksAtColors[color]['1'],
                 file: file,
@@ -71,14 +71,14 @@ export function createNewPieces(boardState) {
                 isProtected: false,
                 hasMoved: false,
             }
-            pieces[color].push(rookPiece);
-            newBoardState[rookPiece.file][rookPiece.rank] = rookPiece;
+            pieces[color].push(piece);
+            newBoardState[piece.file][piece.rank] = piece;
         }
         
         //bishops
         files = ['c', 'f'];
         for(const file of files) {
-            const bishopPiece = {
+            piece = {
                 id: uuidv4(),
                 rank: ranksAtColors[color]['1'],
                 file: file,
@@ -91,35 +91,36 @@ export function createNewPieces(boardState) {
                 isChecking: false,
                 isProtected: true,
             }
-            pieces[color].push(bishopPiece);
-            newBoardState[bishopPiece.file][bishopPiece.rank] = bishopPiece;
+            pieces[color].push(piece);
+            newBoardState[piece.file][piece.rank] = piece;
         }
 
         //pawns
         files = fileMapping;
         for(const file of files) {
             const rank = ranksAtColors[color]['2'];
-            const pawnPiece = {
+            piece = {
                 id: uuidv4(),
                 rank: rank,
                 file: file,
                 type: 'p',
                 color: color,
-                moveableSquares: getMoveableSquares(rank, file, boardState), 
+                moveableSquares: [],
                 takeableSquares: [],
                 freeSquares: [],
                 isPinned: false,
                 isChecking: false,
                 isProtected: true,
             }
-            pieces[color].push(pawnPiece);
-            newBoardState[pawnPiece.file][pawnPiece.rank] = pawnPiece;
+            piece.moveableSquares = getMoveableSquares(piece, boardState);
+            pieces[color].push(piece);
+            newBoardState[piece.file][piece.rank] = piece;
         }
 
         //knights
         files = ['b', 'g'];
         for(const file of files) {
-            const knightPiece = {
+            piece = {
                 id: uuidv4(),
                 rank: ranksAtColors[color]['1'],
                 file: file,
@@ -132,11 +133,11 @@ export function createNewPieces(boardState) {
                 isChecking: false,
                 isProtected: true,
             }
-            pieces[color].push(knightPiece);
-            newBoardState[knightPiece.file][knightPiece.rank] = knightPiece;
+            piece.moveableSquares = getMoveableSquares(piece, boardState);
+            pieces[color].push(piece);
+            newBoardState[piece.file][piece.rank] = piece;
         }
     }
-    
 
     return [pieces, boardState];
 }

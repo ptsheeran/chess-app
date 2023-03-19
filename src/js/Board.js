@@ -1,10 +1,7 @@
 import '../css/Board.css';
 import File from './File';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-
-import { getMoveableSquares } from '../utilities/pieceMovementUtils';
 import { boardStatesEqual } from '../utilities/gameStateUtils';
 import { fileMapping } from '../utilities/fileMapping';
 
@@ -19,13 +16,18 @@ function Board({gameId, color}) {
   onValue(boardStateRef, (snapshot) => {
     const data = snapshot.val();
     if(!boardStatesEqual(data, boardState)) {
-      console.log(data, boardState)
       setBoardState(data)
     }
   });
 
-  function onSquareClick(rank, file) {
-    setMoveableSquares(getMoveableSquares(rank, file, boardState));
+  useEffect(() => {
+    if(!gameId) {
+      setMoveableSquares([]);
+    } 
+  }, [gameId]);
+
+  function onSquareClick(piece) {
+    setMoveableSquares(piece.moveableSquares);
     // setClickedPiece(boardState[col][row]);
   }
 
