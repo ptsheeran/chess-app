@@ -112,7 +112,10 @@ export function createNewPieces(boardState) {
                 isChecking: false,
                 isProtected: true,
             }
-            piece.moveableSquares = getMoveableSquares(piece, boardState);
+            let [moveableSquares, freeSquares, takeableSquares] = getMoveableSquares(piece, boardState);
+            piece.moveableSquares = moveableSquares;
+            piece.freeSquares = freeSquares;
+            piece.takeableSquares = takeableSquares;
             pieces[color].push(piece);
             newBoardState[piece.file][piece.rank] = piece;
         }
@@ -133,7 +136,10 @@ export function createNewPieces(boardState) {
                 isChecking: false,
                 isProtected: true,
             }
-            piece.moveableSquares = getMoveableSquares(piece, boardState);
+            let [moveableSquares, freeSquares, takeableSquares] = getMoveableSquares(piece, boardState);
+            piece.moveableSquares = moveableSquares;
+            piece.freeSquares = freeSquares;
+            piece.takeableSquares = takeableSquares;
             pieces[color].push(piece);
             newBoardState[piece.file][piece.rank] = piece;
         }

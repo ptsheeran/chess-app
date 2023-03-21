@@ -3,7 +3,7 @@ import Square from "./Square";
 
 function File( {file, color, moveableSquares, pieces, onSquareClick} ) {
   function getFileFromArrayIndex(i) {
-    return color === 'black' ? i + 1 : 8 - i;
+    return color === 'b' ? i + 1 : 8 - i;
   }
 
   return (

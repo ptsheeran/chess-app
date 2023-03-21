@@ -7,7 +7,7 @@ const oppositecolor = {
 
 function getSquaresInForwardY(piece, boardState, numSquares=8, direction=1) {
     let free = [];
-    let takeable = null;
+    let takeable = [];
     let squaresCounted = 0;
     let rank = piece.rank;
     const file = piece.file;
@@ -18,7 +18,7 @@ function getSquaresInForwardY(piece, boardState, numSquares=8, direction=1) {
     while(rank !== rankEndCond && squaresCounted < numSquares) {
         rank += rankChange;
         if(isColorPieceOnSquare(boardState[file][rank], oppositecolor[color])) {
-            takeable = file + rank;
+            takeable.push(file + rank);
             break;
         } else if(isColorPieceOnSquare(boardState[file][rank], color)) {
             break;
@@ -30,21 +30,28 @@ function getSquaresInForwardY(piece, boardState, numSquares=8, direction=1) {
     return [free, takeable];
 }
 
-function getPositiveDiagonals(piece, boardState, numSquares=8, direction) {
+function getDiagonals(piece, boardState, rankDirection, fileDirection, numSquares=8) {
     let free = [];
-    let takeable = null;
+    let takeable = [];
     let squaresCounted = 0;
     let rank = piece.rank;
     let file = piece.file;
     const color = piece.color;
-    const rankEndCond = direction===-1 ? 1 : 8;
-    const fileEndCond = direction===-1 ? 'a' : 'h';
+    const rankEndCond = rankDirection===-1 ? 1 : 8;
+    const fileEndCond = fileDirection===-1 ? 'a' : 'h';
 
     while(rank !== rankEndCond && file !== fileEndCond && squaresCounted < numSquares) {
-        rank += direction;
-        file = fileMapping[fileMapping.indexOf(file) + direction];
+        rank += rankDirection;
+        if(piece.id === '101b4a04-af51-4019-b4b5-16738661dd6c') {
+            console.log('1', file)
+        }
+        file = fileMapping[fileMapping.indexOf(file) + fileDirection];
+        if(piece.id === '101b4a04-af51-4019-b4b5-16738661dd6c') {
+            console.log(file)
+            console.log(isColorPieceOnSquare(boardState[file][rank], oppositecolor[color]))
+        }
         if(isColorPieceOnSquare(boardState[file][rank], oppositecolor[color])) {
-            takeable = file + rank;
+            takeable.push(file + rank);
             break;
         } else if(isColorPieceOnSquare(boardState[file][rank], color)) {
             break;
@@ -53,31 +60,8 @@ function getPositiveDiagonals(piece, boardState, numSquares=8, direction) {
             squaresCounted++;
         }
     }
-    return [free, takeable];
-}
-
-function getNegativeDiagonals(piece, boardState, numSquares=8, direction) {
-    let free = [];
-    let takeable = null;
-    let squaresCounted = 0;
-    let rank = piece.rank;
-    let file = piece.file;
-    const color = piece.color;
-    const rankEndCond = direction===-1 ? 1 : 8;
-    const fileEndCond = direction===-1 ? 'h' : 'a';
-
-    while(rank !== rankEndCond && file !== fileEndCond && squaresCounted < numSquares) {
-        rank += direction;
-        file = fileMapping[fileMapping.indexOf(file) - direction];
-        if(isColorPieceOnSquare(boardState[file][rank], oppositecolor[color])) {
-            takeable = file + rank;
-            break;
-        } else if(isColorPieceOnSquare(boardState[file][rank], color)) {
-            break;
-        } else {
-            free.push(file + rank);
-            squaresCounted++;
-        }
+    if(piece.id === '101b4a04-af51-4019-b4b5-16738661dd6c') {
+        console.log(takeable)
     }
     return [free, takeable];
 }
@@ -136,9 +120,11 @@ export function getMoveableSquares(piece, boardState) {
         switch(piece.type) {
             case 'p':
                 const numSquares = pawnInStartingSpot(piece)?2:1;
-                const direction = piece.color==='b' ? -1 : 1;
-                [freeSquares,] = getSquaresInForwardY(piece, boardState, numSquares, direction);
-                [,takeableSquares] = [...getPositiveDiagonals(piece, boardState, 1, direction), ...getNegativeDiagonals(piece, boardState, 1, direction)];
+                const rankDirection = piece.color==='b' ? -1 : 1;
+                [freeSquares,] = getSquaresInForwardY(piece, boardState, numSquares, rankDirection);
+                let [,takeableSquares1] = getDiagonals(piece, boardState, rankDirection, 1, 1);
+                let [,takeableSquares2] = getDiagonals(piece, boardState, rankDirection, -1, 1);
+                takeableSquares = [...takeableSquares1, ...takeableSquares2];
                 break;
             case 'n':
                 [freeSquares, takeableSquares] = getKnightMoveableSquares(piece, boardState);
@@ -157,5 +143,5 @@ export function getMoveableSquares(piece, boardState) {
         moveableSquares = [...moveableSquares, ...takeableSquares];
     }
 
-    return moveableSquares;
+    return [moveableSquares, freeSquares, takeableSquares];
 }

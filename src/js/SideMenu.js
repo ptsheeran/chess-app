@@ -12,16 +12,16 @@ function SideMenu({gameId, onGameIdChange, onColorChange}) {
   function assignPlayers() {
     const num = Math.random();
     if(num < 0.5) {
-      onColorChange('white');
+      onColorChange('w');
       return {
-        white: userId,
-        black: null,
+        w: userId,
+        b: null,
       };
     } else {
-      onColorChange('black');
+      onColorChange('b');
       return {
-        white: null,
-        black: userId,
+        w: null,
+        b: userId,
       }
     }
   }
